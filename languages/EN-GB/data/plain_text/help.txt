@@ -1,0 +1,2 @@
+<h2>Using Plain text</h2>
+<p>Lots of the Huma Bird tools work off plain text files. Use this tool to create these files.</p>

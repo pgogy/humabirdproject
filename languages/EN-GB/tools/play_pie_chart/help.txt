@@ -1,0 +1,2 @@
+<h2>Using Play pie chart</h2>
+<p>Once a play has been created - this tool plots the how many words each character says as a pie chart.</p>

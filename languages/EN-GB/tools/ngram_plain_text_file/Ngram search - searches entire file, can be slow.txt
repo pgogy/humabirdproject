@@ -1,0 +1,1 @@
+Ngram search - searches entire file, can be slow

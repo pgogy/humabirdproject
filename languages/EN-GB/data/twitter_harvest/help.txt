@@ -1,0 +1,2 @@
+<h2>Using Twitter Harvest</h2>
+<p>Use this tool to harvest tweets from Twitter - but you will <a href="?data=twitter_setup">need to set up twitter first</a></p>

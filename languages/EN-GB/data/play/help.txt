@@ -1,0 +1,2 @@
+<h2>Using the Play data tool</h2>
+<p>Use this tool to plot the distance between two words in a file.</p>

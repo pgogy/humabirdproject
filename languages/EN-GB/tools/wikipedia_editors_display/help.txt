@@ -1,0 +1,2 @@
+<h2>Using Wikipedia Editors Display</h2>
+<p>Once a Wikipedia file has been created - this tool will display the number of edits per editor.</p>

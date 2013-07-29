@@ -1,0 +1,11 @@
+<h2>Using Regular expression concordancer</h2>
+<p>First you need to add or create a <a href="?data=plain_text">plain text file</a></p>
+<p>Once you've created a plain text file please then use the concordance tool. You can select the text file you've created, enter a term to search for and also how much surrounding text you'd like</p>
+<p>The regular expression can take a variety of elements</p>
+<ul>
+	<li>Use a question mark for single character</li>
+	<li>An Asterisk is multiple characters</li>
+	<li>A Plus is an optional character</li>
+</ul>
+<p>So to match Howth, as well as How - you could use Ho*</p>
+<p>So to match all words ending in n, you could use *n</p>

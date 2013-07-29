@@ -1,0 +1,2 @@
+<h2>Using Play fingerprint</h2>
+<p>Once a play has been created - this tool plots how often a character speaks to another character.</p>

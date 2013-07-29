@@ -1,0 +1,3 @@
+<h2>Using the concordancer</h2>
+<p>First you need to add or create a <a href="?data=plain_text">plain text file</a></p>
+<p>Once you've created a plain text file please then use the concordance tool. You can select the text file you've created, enter a term to search for and also how much surrounding text you'd like</p>

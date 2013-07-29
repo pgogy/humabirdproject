@@ -1,0 +1,2 @@
+<h2>Using the Zipf</h2>
+<p>Taking a plain text file this will create a Zipf file from the plain text file. A Zipf file contains a total of how often each word occurs.</p>

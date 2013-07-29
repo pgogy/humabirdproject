@@ -1,0 +1,2 @@
+<h2>Using Web Page Conversion</h2>
+<p>A downloaded web page contains a lot of HTML which isn't required for plain text analysis. Use this tool to remove the html and leave just the plain text.</p>

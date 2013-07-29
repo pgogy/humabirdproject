@@ -1,0 +1,2 @@
+<h2>Using Before and After management</h2>
+<p>Once a plain text file has been created, then you can use it to create a "before and after" file to which contains all the words which occur before and after another word.</p>

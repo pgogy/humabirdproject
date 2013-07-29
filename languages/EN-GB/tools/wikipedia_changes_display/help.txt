@@ -1,0 +1,2 @@
+<h2>Using Wikipedia Changes Display</h2>
+<p>Once a Wikipedia file has been created - this tool creates a list showing how the size of the page has changed</p>

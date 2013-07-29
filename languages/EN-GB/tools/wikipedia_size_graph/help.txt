@@ -1,0 +1,2 @@
+<h2>Using Wikipedia Editors Size Graph</h2>
+<p>Once a Wikipedia file has been created - this tool will display the size of the page as a graph</p>

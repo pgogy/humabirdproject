@@ -1,0 +1,2 @@
+<h2>Using the Word distance tool</h2>
+<p>Use the Word distance tool to turn plain text into files which can be used for measuring the distance between word position in plain text files.</p>

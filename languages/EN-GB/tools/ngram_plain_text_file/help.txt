@@ -1,0 +1,2 @@
+<h2>Using the Ngram Compare to Plain text</h2>
+<p>Use this tool to compare a plain text file to an Ngram file. THis can be slow</p>

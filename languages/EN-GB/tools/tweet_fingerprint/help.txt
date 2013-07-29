@@ -1,0 +1,2 @@
+<h2>Using the Tweet Fingerprint Tool</h2>
+<p>This tool will take a twitter harvest file - and display all the tweets as a chronological timeline.</p>

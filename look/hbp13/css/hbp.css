@@ -1,0 +1,93 @@
+html{
+	padding:0px;
+	margin:0px;
+	font-family:verdana,tahoma,arial;
+	color:#6a6a6a;
+	background-color:#efefef;
+	background:url("../images/background.png");
+	background-repeat:repeat-x;
+	font-size:90%;
+}
+
+a{
+	color:#333;
+	text-decoration:none;
+}
+
+body{
+	padding:0px;
+	margin:0px;
+}
+
+div#side{
+	float:left;
+	position:relative;
+	width:15%;
+	height:400px;
+	background:url("../images/logo.png");
+	background-repeat:no-repeat;
+	border-right:2px solid #f8f8f8;
+	margin-top:10px;
+}
+
+div#main{
+	float:left;
+	position:relative;
+	width:80%;
+	margin-left:15px;
+	margin-top:14px;
+}
+
+.hide{
+	display:none;
+}
+
+div#logo{
+	float:left;
+	width:100%;
+	border-bottom:2px solid #f8f8f8;
+	padding-bottom:7px;
+	margin-bottom:2px;
+}
+
+div.type{
+	float:left; 
+	position:relative; 
+	width:100%;
+	padding-bottom:5px;
+	margin-bottom:5px;
+}
+
+div.type h2{
+	padding:0px;
+	margin:0px;
+}
+
+.type h2, .type h3, .columns h2, .columns h3{
+	margin:0 5px 0 0;
+	cursor:pointer;
+	cursor:hand;
+	padding:5px;
+}
+
+div.columns div{
+	float:left;
+	width:25%;
+	border-left:2px solid #fff;
+	padding-left:20px;
+}
+
+div.columns div:first-child{
+	border:none;
+}
+
+p.intro{
+	margin:0px;
+	padding:0px;
+}
+
+ul{
+	list-style:none;
+	padding:0px;
+	margin:0px;
+}

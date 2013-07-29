@@ -1,0 +1,2 @@
+<h2>Using the Tweet Hashtags Tool</h2>
+<p>This tool will take a twitter harvest file - and display all the hashtags mentioned in tweets.</p>

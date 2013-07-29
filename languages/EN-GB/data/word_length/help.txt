@@ -1,0 +1,2 @@
+<h2>Using the Word Length Tool</h2>
+<p>Taking a plain text file this will count the length of a word and how often a word of that length occurs</p>

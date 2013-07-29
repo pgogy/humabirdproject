@@ -1,0 +1,2 @@
+<h2>Using the Before and After search</h2>
+<p>Taking a Before and After Search file, this tool allows you to search that for specific words.</p>

@@ -1,0 +1,2 @@
+<h2>Using Play Network</h2>
+<p>Once a play has been created - this tool plots which characters speak to other characters in the play</p>

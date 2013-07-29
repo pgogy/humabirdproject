@@ -1,0 +1,2 @@
+<h2>Using Word Count Display</h2>
+<p>Once a Word Count display file has been created - this tool allows those to be displayed</p>

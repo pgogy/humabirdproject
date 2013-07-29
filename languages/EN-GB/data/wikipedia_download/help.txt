@@ -1,0 +1,2 @@
+<h2>Using the Wikipedia Download Tool</h2>
+<p>This tool will download a list of all the revisions of a Wikipedia page.</p>

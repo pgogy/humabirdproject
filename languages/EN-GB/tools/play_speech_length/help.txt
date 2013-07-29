@@ -1,0 +1,2 @@
+<h2>Using Play speech length</h2>
+<p>Once a play has been created - this tool plots the length of each speech.</p>

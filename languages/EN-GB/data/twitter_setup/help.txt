@@ -1,0 +1,21 @@
+<h2>Using Twitter Setup</h2>
+<p>Here is how to setup the twitter harvest tool</p>
+<ul>
+	<li>Visit <a target="_blank" href="http://dev.twitter.com">dev.twitter.com</a></li>
+	<li>Create an account, or sign in with your standard username</li>
+	<li>Click on your profile picture and select "My Applications"</li>
+	<li>Click on "Create a new application"</li>
+	<li>Enter a name, description and website - these can be anything you want</li>
+	<li>If you agree with the developer terms, click to agree</li>
+	<li>Click "Create your twitter application"</li>
+	<li>On the page that loads click on "create my access token" at the bottom</li>
+	<li>Your four settings now exist to <a target="_blank" href="?data=twitter_setup&action=create">enter here</a></li>
+	<li>
+		<ol>
+			<li>On Twitter "Consumer key" is Huma Bird's "Consumer Key"</li>
+			<li>On Twitter "Consumer secret" is Huma Bird's "Consumer secret"</li>
+			<li>On Twitter "Access token" is Huma Bird's "OAuth Key"</li>
+			<li>On Twitter "Access token secret" is Huma Bird's "OAuth secret"</li>
+		</ol>	
+	</li>
+</ul>

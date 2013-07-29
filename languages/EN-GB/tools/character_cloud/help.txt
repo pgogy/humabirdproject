@@ -1,0 +1,2 @@
+<h2>Using Character Cloud</h2>
+<p>Once a play has been created - this tool creates a list of the words each character uses</p>

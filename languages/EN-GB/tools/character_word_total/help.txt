@@ -1,0 +1,2 @@
+<h2>Using Character Word Total</h2>
+<p>Once a play has been created - this tool creates a list how many word each characters says</p>

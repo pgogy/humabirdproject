@@ -1,0 +1,3 @@
+<h2>Using Web Page Management</h2>
+<p>This tool allows you to download a web page from the internet, then use other tools on it.</p>
+<p>Once you've downloaded a page from the internet, you may wish to convert it to a <a href="?data=web_page_plain_text">plain text file</a></p>
