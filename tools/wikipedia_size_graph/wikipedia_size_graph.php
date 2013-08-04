@@ -141,9 +141,9 @@
 				
 				}
 
-				$data = $file_process->file_image_create("data/wikipedia_download/files/images/" . str_replace(".","",$_POST['wikifile']) . "_size.jpg", "jpeg", $im);
-						
-				$output .= "<img src='data/wikipedia_download/files/images/" . str_replace(".","",$_POST['wikifile']) . "_size.jpg' />";		
+				$data = $file_process->file_image_create("data/wikipedia_download/files/images/" . urldecode(str_replace(".","",$_POST['wikifile'])) . "_size.jpg", "jpeg", $im);
+												
+				$output .= "<img src='data/wikipedia_download/files/images/" . urldecode(str_replace(".","",$_POST['wikifile'])) . "_size.jpg' />";		
 				
 				return $output . "<p><a href='?tool=wikipedia_size_graph'>" . $this->language->translate("tools/wikipedia_size_graph", "Return to Wikipedia Size Display") . "</a></p>";
 				
