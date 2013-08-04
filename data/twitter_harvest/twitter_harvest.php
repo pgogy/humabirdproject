@@ -134,7 +134,13 @@
 			
 				$this->get_tweets($counter+1, $connection, $stem . $content->search_metadata->next_results, $stem, $time);
 						
-			}		
+			}else if(count($content->statuses)==99){
+			
+				$url = $url . "&max_id=" . $content->statuses[98]->id_str;
+				
+				$this->get_tweets($counter+1, $connection, $url, $stem, $time);
+				
+			}
 		
 		}
 		
