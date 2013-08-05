@@ -140,6 +140,18 @@
 				
 				$this->get_tweets($counter+1, $connection, $url, $stem, $time);
 				
+			}else{
+			
+				if(count($content->statuses)!=1){
+			
+					$tweet = array_pop($content->statuses);
+					
+					$url = $url . "&max_id=" . $tweet->id_str;
+					
+					$this->get_tweets($counter+1, $connection, $url, $stem, $time);
+					
+				}
+			
 			}
 		
 		}
