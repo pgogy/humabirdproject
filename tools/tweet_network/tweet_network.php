@@ -282,32 +282,36 @@
 				$twitter_users = array();
 				
 				foreach($data as $tweet){
+					
+					$name = strtolower($tweet->user->screen_name);
+				
+					if(!isset($twitter_users[$name])){
+								
+						$twitter_users[$name] = array();
+					
+					}
 				
 					if(isset($tweet->entities)){
 				
-						if(count($tweet->entities->user_mentions)!=1){
+						if(count($tweet->entities->user_mentions)!=0){
 					
 							foreach($tweet->entities->user_mentions as $key => $inner_data){
 							
-								if(!isset($twitter_users[$tweet->user->screen_name])){
+								$inner_name = strtolower($inner_data->screen_name);
 								
-									$twitter_users[$tweet->user->screen_name] = array();
+								if(!isset($twitter_users[$inner_name])){
 								
-								}
-								
-								if(!isset($twitter_users[$inner_data->screen_name])){
-								
-									$twitter_users[$inner_data->screen_name] = array();
+									$twitter_users[$inner_name] = array();
 								
 								}
 								
-								if(isset($twitter_users[$tweet->user->screen_name][$inner_data->screen_name])){
+								if(isset($twitter_users[$name][$inner_name])){
 								
-									$twitter_users[$tweet->user->screen_name][$inner_data->screen_name]++;
+									$twitter_users[$name][$inner_name]++;
 									
 								}else{
 								
-									$twitter_users[$tweet->user->screen_name][$inner_data->screen_name]=1;
+									$twitter_users[$name][$inner_name]=1;
 									
 								}
 							
@@ -598,7 +602,7 @@
 				
 					if(isset($tweet->entities)){
 				
-						if(count($tweet->entities->user_mentions)!=1){
+						if(count($tweet->entities->user_mentions)!=0){
 					
 							foreach($tweet->entities->user_mentions as $key => $inner_data){
 							
@@ -755,7 +759,7 @@
 				
 					if(isset($tweet->entities)){
 				
-						if(count($tweet->entities->user_mentions)!=1){
+						if(count($tweet->entities->user_mentions)!=0){
 					
 							foreach($tweet->entities->user_mentions as $key => $inner_data){
 							

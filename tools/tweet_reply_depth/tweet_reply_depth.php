@@ -51,7 +51,7 @@
 		
 			if(!isset($_GET['action'])){
 
-				$output = "<h2>" . $this->language->translate("tools/tweet_reply_depth", "Tweet Fingerprint Display") . "</h2>
+				$output = "<h2>" . $this->language->translate("tools/tweet_reply_depth", "Tweet Reply Depth Display") . "</h2>
 						   <ul>
 								<li>
 									<a href='?tool=tweet_reply_depth&action=instructions'>" . $this->language->translate("tools/tweet_reply_depth", "Instructions") . "</a>
