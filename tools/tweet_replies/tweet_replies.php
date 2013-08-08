@@ -127,7 +127,7 @@
 				
 				$degree_ratio = 360 / ($tweet_replies + $tweet_nonreplies);
 				
-				$im = imagecreatetruecolor(800,625 + ($tweet_replies + $tweet_nonreplies)*40);
+				$im = imagecreatetruecolor(800,625 + 80);
 				$white = imagecolorallocate($im, 255,255,255);
 				$red = imagecolorallocate($im, 255,0,0);
 				$last_angle = 90.0;
