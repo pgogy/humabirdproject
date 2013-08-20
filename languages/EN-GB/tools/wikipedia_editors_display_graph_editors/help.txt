@@ -1,0 +1,2 @@
+<h2>Using Wikipedia Editors Display Graph - With Highlight</h2>
+<p>Once a Wikipedia file has been created - this tool will display the size of the editted wikipedia file, but with the edits of the most common editor highlighted</p>

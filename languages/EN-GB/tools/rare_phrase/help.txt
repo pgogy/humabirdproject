@@ -1,0 +1,2 @@
+<h2>Using the Rare Phrase</h2>
+<p>This text tool shows rare phrases in a text file</p>

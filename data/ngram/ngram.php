@@ -104,8 +104,9 @@
 			foreach($words as $key => $value){
 				$words[$key] = trim($value);
 			}			
-			$words = array_filter($words);
 			
+			$words = array_filter($words);
+		
 			$last_word = array();
 			$words_list = array();
 			
@@ -131,7 +132,7 @@
 						while($first=="!"||$first=="."||$first==","||$first=="?"||$first==":"||$first==";"||$first==")"||$first=="("){
 						
 							$word = substr($word,1,strlen($word)-1);
-							$first = substr($word,strlen($word)-1,1);
+							$first = substr($word,0,1);
 							
 						}
 						

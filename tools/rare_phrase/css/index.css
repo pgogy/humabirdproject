@@ -1,0 +1,11 @@
+div.rare_phrase{
+	float:left;
+	width:50%;
+}
+
+div.rare_phrase p{
+	word-wrap:break-word;
+	margin:0px;
+	padding:0px;
+	font-size:80%;
+}

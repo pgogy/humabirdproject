@@ -1,2 +1,2 @@
-<h2>Using the Tweet reply depth</h2>
-<p>Tweets can be replies to tweets, which are themselves replies. This tool looks at how long the tweet reply chain is</p>
+<h2>Using the Tweet Reply Depth</h2>
+<p>This shows how long a conversation of twitter replies is</p>

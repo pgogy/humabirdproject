@@ -125,11 +125,7 @@
 		private function get_tweets($counter,$connection,$url,$stem,$time){
 		
 			$content = $connection->get($url);
-			
-			echo "<pre>";
-			
-			print_r($content);
-			
+						
 			require_once("core/file_handling/file_handling.php");
 			$file_process = new file_handling();
 			$file_process->create_file("data/twitter_harvest/files/" . urlencode($_POST['term']) . "_" . $time . "_" . $counter . ".json", serialize($content));
@@ -155,8 +151,6 @@
 					$this->get_tweets($counter+1, $connection, $url, $stem, $time);
 					
 				}
-				
-				die();
 			
 			}
 		
