@@ -120,6 +120,9 @@
 				$size = max(count($tweets)*1.1, 1200);
 				$width = max(count($tweets), 1200);
 				
+				$width = min(11000, $width);
+				$size = min(12000, $size);
+				
 				$im = imagecreatetruecolor($size, $size);
 				$white = imagecolorallocate($im, 255,255,255);
 				$grey = imagecolorallocate($im, 200,200,200);

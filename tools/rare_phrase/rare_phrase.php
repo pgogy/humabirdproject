@@ -83,6 +83,8 @@
 		
 			if(count($_POST)!==0){
 
+				print_r($_POST);
+
 				require_once("core/file_handling/file_handling.php");
 				$file_process = new file_handling();
 				$data = $file_process->file_get_all("data/plain_text/files/" . $_POST['textfile']);
@@ -123,23 +125,31 @@
 								
 							}
 							
-							if(count($last_word)==$_POST['phraselength']){
+							if(trim($word)!=""){
+					
+								if(strlen($word)!=1){
 							
-								if(!isset($words_list[implode("*",$last_word)])){
-										
-									$words_list[implode("*",$last_word)] = 1;
-										
-								}else{
+									if(count($last_word)==$_POST['phraselength']){
 									
-									$words_list[implode("*",$last_word)]++;
+										if(!isset($words_list[implode("*",$last_word)])){
+												
+											$words_list[implode("*",$last_word)] = 1;
+												
+										}else{
+											
+											$words_list[implode("*",$last_word)]++;
+											
+										}
+										
+										array_shift($last_word);
+										
+									}
+									
+									array_push($last_word,$word);
 									
 								}
 								
-								array_shift($last_word);
-								
 							}
-							
-							array_push($last_word,$word);
 								
 						}
 						
@@ -163,8 +173,14 @@
 				
 					$parts = explode("*", $word);
 					
-					$phrase_score[$word] = $words_count[$parts[0]] + $words_count[$parts[1]]; 
-				
+					$phrase_score[$word] = 0;
+					
+					while($word_part = array_pop($parts)){
+					
+						$phrase_score[$word] += $words_count[$word_part];
+
+					}
+					
 				}
 				
 				asort($words_list);

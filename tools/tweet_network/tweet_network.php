@@ -329,7 +329,22 @@
 				
 				$width = max(count($twitter_users) * 8, 1200);
 				
+				if($width > 10000){
+				
+					$width = min($width, 10000);
+					
+					$users = 19999;
+					
+					$font_size = 4.0;
+				
+				}else{
+				
+					$font_size = 10.0;
+				
+				}
+				
 				$im = imagecreatetruecolor($width,$width);
+				
 				$white = imagecolorallocate($im, 255,255,255);
 				$red = imagecolorallocate($im, 255,0,0);
 				
@@ -354,8 +369,18 @@
 						}
 						
 					}
+					
+					$clock_point+=$ratio;
+					
+				}
 				
-					imagettftext ( $im , 10.0 , 0-$clock_point, $x_pos , $y_pos , $white , "core/misc/fonts/arial.ttf" , $key);
+				foreach($twitter_users as $key => $value){
+				
+					$y_pos = ($width / 2) + (integer)round( (($width / 2) - ($users/2)) * sin( deg2rad($clock_point) ) );
+					$x_pos = ($width / 2) + (integer)round( (($width / 2) - ($users/2)) * cos( deg2rad($clock_point) ) );
+					
+				
+					imagettftext ( $im , $font_size , 0-$clock_point, $x_pos , $y_pos , $white , "core/misc/fonts/arial.ttf" , $key);
 					$clock_point+=$ratio;
 				
 				}	
@@ -642,9 +667,39 @@
 				
 				$width = max(count($twitter_users) * 8, 1200);
 				
+				if($width > 10000){
+				
+					$width = min($width, 10000);
+					
+					$users = 19999;
+					
+					$font_size = 4.0;
+				
+				}else{
+				
+					$font_size = 10.0;
+				
+				}
+				
 				$im = imagecreatetruecolor($width,$width);
 				$white = imagecolorallocate($im, 255,255,255);
 				$red = imagecolorallocate($im, 255,0,0);
+				
+				$width = max(count($twitter_users) * 8, 1200);
+				
+				if($width > 10000){
+				
+					$width = min($width, 10000);
+					
+					$users = 19999;
+					
+					$font_size = 4.0;
+				
+				}else{
+				
+					$font_size = 10.0;
+				
+				}
 				
 				$clock_point = 0;	
 				
@@ -681,8 +736,17 @@
 						}
 						
 					}
+					
+					$clock_point+=$ratio;
+					
+				}
 				
-					imagettftext ( $im , 10.0 , 0-$clock_point, $x_pos , $y_pos , $white , "core/misc/fonts/arial.ttf" , $key);
+				foreach($twitter_users as $key => $value){
+				
+					$y_pos = ($width / 2) + (integer)round( (($width / 2) - ($users/2)) * sin( deg2rad($clock_point) ) );
+					$x_pos = ($width / 2) + (integer)round( (($width / 2) - ($users/2)) * cos( deg2rad($clock_point) ) );
+				
+					imagettftext ( $im , $font_size , 0-$clock_point, $x_pos , $y_pos , $white , "core/misc/fonts/arial.ttf" , $key);
 					$clock_point+=$ratio;
 				
 				}	
@@ -799,6 +863,20 @@
 				
 				$width = max(count($twitter_users) * 8, 1200);
 				
+				if($width > 10000){
+				
+					$width = min($width, 10000);
+					
+					$users = 19999;
+					
+					$font_size = 4.0;
+				
+				}else{
+				
+					$font_size = 10.0;
+				
+				}
+				
 				$im = imagecreatetruecolor($width,$width);
 				$white = imagecolorallocate($im, 255,255,255);
 				$red = imagecolorallocate($im, 255,0,0);
@@ -835,7 +913,7 @@
 						
 					}
 				
-					imagettftext ( $im , 10.0 , 0-$clock_point, $x_pos , $y_pos , $white , "core/misc/fonts/arial.ttf" , $key);
+					imagettftext ( $im , $font_size , 0-$clock_point, $x_pos , $y_pos , $white , "core/misc/fonts/arial.ttf" , $key);
 					$clock_point+=$ratio;
 				
 				}	

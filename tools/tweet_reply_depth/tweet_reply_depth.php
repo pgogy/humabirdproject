@@ -154,7 +154,7 @@
 				
 				$im = imagecreatetruecolor(800,625 + count($tweet_depth)*40);
 				$white = imagecolorallocate($im, 255,255,255);
-				$last_angle = 90.0;
+				$last_angle = 0;
 				$speakers_y = 650;
 				
 				$other_colour = imagecolorallocate($im, 255,255,255);
@@ -162,10 +162,9 @@
 				
 				foreach($tweet_depth as $key => $data){
 				
-					if(($value*$degree_ratio)>1){
+					if(($data*$degree_ratio)>1){
 					
 						$colour = imagecolorallocate($im, rand(10,240),rand(10,240),rand(10,240));
-
 						imagefilledarc ($im , 400 , 400 , 450 , 450 , $last_angle , $last_angle+($data*$degree_ratio) , $colour, IMG_ARC_PIE );
 						imagefilledrectangle($im, 170, $speakers_y-15 , 190, $speakers_y , $colour );
 						imagettftext ( $im , 15.0 , 0 , 200 , $speakers_y , $white , "core/misc/fonts/arial.ttf" , $key . " "  . $data);
@@ -173,12 +172,15 @@
 						
 					}else{
 					
-						$other_angle += ($data*$degree_ratio);
+						$colour = imagecolorallocate($im, rand(10,240),rand(10,240),rand(10,240));
+						imagefilledrectangle($im, 170, $speakers_y-15 , 190, $speakers_y , $colour );
+						imagettftext ( $im , 15.0 , 0 , 200 , $speakers_y , $white , "core/misc/fonts/arial.ttf" , $key . " "  . $data);
+						$speakers_y += 18;
 					
 					}
 
 					$last_angle += (integer)$data*$degree_ratio;
-				
+					
 				}	
 								
 				$file_process->file_image_create("data/twitter_harvest/files/piechart/" . str_replace("%23","", str_replace(".","",$_POST['tweetfile'])) . "_reply_depth_pie.jpg", "jpeg", $im);

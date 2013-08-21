@@ -144,7 +144,7 @@
 				$grey = imagecolorallocate($im, 200,200,200);
 				$red = imagecolorallocate($im, 255,0,0);
 				
-				$clock_point = 0;	
+				$clock_point = 270;	
 				
 				$interactions = array_keys($tweets);
 				
