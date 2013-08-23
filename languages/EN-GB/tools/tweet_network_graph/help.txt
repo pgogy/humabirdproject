@@ -1,0 +1,3 @@
+<h2>Using the Tweet Network Graph</h2>
+<p>This shows which how the network of a twitter hashtag may function</p>
+<p>Unlike the circular network diagrams this just looks for patterns.</p>
