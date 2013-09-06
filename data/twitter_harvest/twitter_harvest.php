@@ -134,24 +134,24 @@
 			
 				$this->get_tweets($counter+1, $connection, $stem . $content->search_metadata->next_results, $stem, $time);
 						
-			}else if(count($content->statuses)==99){
+			}else if(isset($content->statuses)){
 			
-				$url = $url . "&max_id=" . $content->statuses[98]->id_str;
-				
-				$this->get_tweets($counter+1, $connection, $url, $stem, $time);
-				
-			}else{
+				if(count($content->statuses)==99){
 			
-				if(isset($content->statuses)){
+					$url = $url . "&max_id=" . $content->statuses[98]->id_str;
+				
+					$this->get_tweets($counter+1, $connection, $url, $stem, $time);
+				
+				}else{
 			
 					if(count($content->statuses)!=1){
-				
+					
 						$tweet = array_pop($content->statuses);
-						
+							
 						$new_url = $url . "&max_id=" . $tweet->id_str;
-						
+							
 						$this->get_tweets($counter+1, $connection, $new_url, $url, $time);
-						
+							
 					}
 				
 				}

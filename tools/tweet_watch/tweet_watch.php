@@ -117,13 +117,13 @@
 				$ratio = 360 / (count($tweets));				
 				
 				$users = max(count($tweets), 200);				
-				$size = max(count($tweets)*1.1, 1200);
+				$size = max(count($tweets), 1200);
 				$width = max(count($tweets), 1200);
 				
-				$width = min(11000, $width);
+				$width = min(10000, $width);
 				$size = min(12000, $size);
 				
-				$im = imagecreatetruecolor($size, $size);
+				$im = imagecreatetruecolor($size * 1.2, $size * 1.2);
 				$white = imagecolorallocate($im, 255,255,255);
 				$grey = imagecolorallocate($im, 200,200,200);
 				$red = imagecolorallocate($im, 255,0,0);
@@ -136,18 +136,18 @@
 				
 					if($value!=0){
 				
-						$y_pos = ($size / 2) + (integer)round( ($width / 2) * sin( deg2rad($clock_point) ) );
-						$x_pos = ($size / 2) + (integer)round( ($width / 2) * cos( deg2rad($clock_point) ) );
+						$y_pos = (($size*1.1) / 2) + (integer)round( ($width / 2) * sin( deg2rad($clock_point) ) );
+						$x_pos = (($size*1.1) / 2) + (integer)round( ($width / 2) * cos( deg2rad($clock_point) ) );
 						
-						$mark_y_pos = ($size / 2) + (integer)round( (($width+20/2) - ($width/2)) * sin( deg2rad($clock_point) ) );
-						$mark_x_pos = ($size / 2) + (integer)round( (($width+20/2) - ($width/2)) * cos( deg2rad($clock_point) ) );
+						$mark_y_pos = (($size*1.1) / 2) + (integer)round( (($width+20/2) - ($width/2)) * sin( deg2rad($clock_point) ) );
+						$mark_x_pos = (($size*1.1) / 2) + (integer)round( (($width+20/2) - ($width/2)) * cos( deg2rad($clock_point) ) );
 						
 						for($x=0;$x<count($interactions);$x++){
 						
 							if($tweets[$interactions[$x]]==$key){
 								
-								$line_y_pos = ($size / 2) + (integer)round( ($width / 2) * sin( deg2rad($ratio * $x) ) );
-								$line_x_pos = ($size / 2) + (integer)round( ($width / 2) * cos( deg2rad($ratio * $x) ) );
+								$line_y_pos = (($size*1.1) / 2) + (integer)round( ($width / 2) * sin( deg2rad($ratio * $x) ) );
+								$line_x_pos = (($size*1.1) / 2) + (integer)round( ($width / 2) * cos( deg2rad($ratio * $x) ) );
 											
 								imageline($im, $x_pos, $y_pos, $line_x_pos, $line_y_pos, $red);
 								imageline($im, $x_pos, $y_pos, $mark_x_pos, $mark_y_pos, $white);
@@ -160,11 +160,11 @@
 						
 					}else{
 					
-						$y_pos = ($size / 2) + (integer)round( ($width / 2) * sin( deg2rad($clock_point) ) );
-						$x_pos = ($size / 2) + (integer)round( ($width / 2) * cos( deg2rad($clock_point) ) );
+						$y_pos = (($size*1.1) / 2) + (integer)round( ($width / 2) * sin( deg2rad($clock_point) ) );
+						$x_pos = (($size*1.1) / 2) + (integer)round( ($width / 2) * cos( deg2rad($clock_point) ) );
 						
-						$mark_y_pos = ($size / 2) + (integer)round( (($width+20/2) - ($width/2)) * sin( deg2rad($clock_point) ) );
-						$mark_x_pos = ($size / 2) + (integer)round( (($width+20/2) - ($width/2)) * cos( deg2rad($clock_point) ) );
+						$mark_y_pos = (($size*1.1) / 2) + (integer)round( (($width+20/2) - ($width/2)) * sin( deg2rad($clock_point) ) );
+						$mark_x_pos = (($size*1.1) / 2) + (integer)round( (($width+20/2) - ($width/2)) * cos( deg2rad($clock_point) ) );
 						
 						imageline($im, $x_pos, $y_pos, $mark_x_pos, $mark_y_pos, $red);						
 					

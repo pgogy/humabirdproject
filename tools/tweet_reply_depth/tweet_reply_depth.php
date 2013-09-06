@@ -107,52 +107,58 @@
 				
 				foreach($data as $tweet){
 				
-					if(isset($tweet->id_str)){
-					
-						if($tweet->in_reply_to_status_id_str!=""){
+					if(isset($tweet->in_reply_to_status_id_str)){
+				
+						if(!isset($replies[$tweet->id_str])){
 						
-							$replies[$tweet->id_str] = $tweet->in_reply_to_status_id_str;
-							
-						}else{
-						
-							$tweet_depth[0]++;
-						
-						}
-						
-					}
-					
-				}	
-				
-				$depth = 1;
-				
-				while(count($replies)!=0){
-				
-					$tweet_depth[$depth] = count($replies);
-				
-					$replies = array_unique($replies);
-					$keys = array_values($replies);
-				
-					$new_replies = array();
-				
-					foreach($keys as $id => $value){
-					
-						if(isset($replies[$value])){
-					
-							$new_replies[$value] = $replies[$value];
+							$replies[$tweet->id_str] = array();
 						
 						}
 					
+						array_push($replies[$tweet->id_str], $tweet->in_reply_to_status_id_str);
+						
+					}else{
+						
+						$tweet_depth[0]++;
+						
 					}
-					
-					$depth++;
-				
-					$replies = $new_replies;
 					
 				}
 				
-				$degree_ratio = 360 / array_sum($tweet_depth);
+				$tweet_depth = 0;
 				
-				$im = imagecreatetruecolor(800,625 + count($tweet_depth)*40);
+				$tweet_threads = array();
+				
+				$tweets = array_keys($replies);
+	
+				foreach($replies as $curr_tweet => $reply_to){
+				
+					$curr_tweet = $reply_to[0];
+
+					while(in_array($curr_tweet,$tweets)){
+					
+						$curr_tweet = $replies[$curr_tweet][0];						
+						$tweet_depth++;
+					
+					}
+					
+					if(!isset($tweet_threads[$tweet_depth])){
+					
+						$tweet_threads[$tweet_depth]=0;
+					
+					}
+					
+					$tweet_threads[$tweet_depth]++;
+					
+					$tweet_depth=0;
+					
+				}
+				
+				ksort($tweet_threads);
+				
+				$degree_ratio = 360 / array_sum($tweet_threads);
+				
+				$im = imagecreatetruecolor(800,625 + count($tweet_threads)*40);
 				$white = imagecolorallocate($im, 255,255,255);
 				$last_angle = 0;
 				$speakers_y = 650;
@@ -160,7 +166,7 @@
 				$other_colour = imagecolorallocate($im, 255,255,255);
 				$other_angle = 0;
 				
-				foreach($tweet_depth as $key => $data){
+				foreach($tweet_threads as $key => $data){
 				
 					if(($data*$degree_ratio)>1){
 					

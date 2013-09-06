@@ -717,20 +717,14 @@
 							$line_y_pos = ($width / 2) + (integer)round( (($width / 2) - ($users/2)) * sin( deg2rad($ratio * $x) ) );
 							$line_x_pos = ($width / 2) + (integer)round( (($width / 2) - ($users/2)) * cos( deg2rad($ratio * $x) ) );
 							
-							if(!isset($twitter_users[$key][$interactions[$x]])){
+							if(isset($twitter_users[$key][$interactions[$x]])&&isset($twitter_users[$interactions[$x]][$key])){
 							
-								imageline($im, $x_pos, $y_pos, $line_x_pos, $line_y_pos, imagecolorallocate($im, (integer)(255),0,0));
+								imageline($im, $x_pos, $y_pos, $line_x_pos, $line_y_pos, $white);
 								
 							}else{
 							
-								if(isset($twitter_users[$interactions[$x]][$key])){
+								imageline($im, $x_pos, $y_pos, $line_x_pos, $line_y_pos, imagecolorallocate($im, (integer)(255),0,0));
 								
-									unset($twitter_users[$interactions[$x]][$key]);
-								
-								}
-							
-								imageline($im, $x_pos, $y_pos, $line_x_pos, $line_y_pos, $white);
-							
 							}
 							
 						}

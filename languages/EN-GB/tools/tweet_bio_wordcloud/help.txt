@@ -1,0 +1,2 @@
+<h2>Using the Twitter bio wordcloud</h2>
+<p>This tool creates a word cloud from Twitter user's descriptions</p>

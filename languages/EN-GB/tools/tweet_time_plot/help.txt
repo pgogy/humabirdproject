@@ -1,0 +1,2 @@
+<h2>Using the Twitter time plot</h2>
+<p>This tool plots how many tweets happen at certain times in a harvest</p>
