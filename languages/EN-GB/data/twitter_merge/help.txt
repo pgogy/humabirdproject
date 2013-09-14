@@ -1,0 +1,2 @@
+<h2>Using Twitter Merge</h2>
+<p>Use this tool to merge tweet harvests</p>
