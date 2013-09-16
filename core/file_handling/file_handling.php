@@ -157,7 +157,7 @@
 					
 			while($file = readdir($files)){
 			
-				if( $file != "." && $file != ".." ){
+				if( $file != "." && $file != ".." && $file != ".gitignore"){
 				
 					if(!is_dir($file_path . $file)){
 				
@@ -177,14 +177,18 @@
 
 			$includes = array();
 
-			$files = opendir($file_path);
-					
-			while($file = readdir($files)){
+			if(is_dir($file_path)){			
 			
-				if( $file != "." && $file != ".." ){
+				$files = opendir($file_path);
+						
+				while($file = readdir($files)){
 				
-					array_push($includes, $file);
+					if( $file != "." && $file != ".." && $file != ".gitignore"){
 					
+						array_push($includes, $file);
+						
+					}
+				
 				}
 			
 			}

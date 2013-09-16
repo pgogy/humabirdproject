@@ -152,7 +152,7 @@
 			
 			while($data = array_pop($datum)){
 			
-				if($data !="data.php"){
+				if($data !="data.php" && $data!=".DS_Store"){
 				
 					require_once("data/" . $data . "/" . $data . ".php");	
 					$data_page = new $data($this->language);			
@@ -182,7 +182,7 @@
 			
 			while($tool = array_pop($tools)){
 			
-				if($tool !="tool.php"){
+				if($tool !="tool.php" && $tool!=".DS_Store"){
 				
 					require_once("tools/" . $tool . "/" . $tool . ".php");	
 					$tool_page = new $tool($this->language);			

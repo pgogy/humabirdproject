@@ -123,6 +123,12 @@
 				
 				}
 				
+				if(count($out)==0){
+
+					$output = "<p>" . $this->language->translate("tools/regexp_concordance", "No results found") . "</p>";				
+					
+				}
+				
 				return $output . "<p><a href='?tool=regexp_concordance'>" . $this->language->translate("tools/regexp_concordance", "Return to Regular Expression Concordance") . "</a></p>";
 				
 			}else{
