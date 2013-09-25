@@ -124,7 +124,7 @@
 				
 				foreach($tweets as $tweet){
 							
-					imageline($im, $x_pos, $y_pos + ($twitter_users[$tweet]*12), $x_pos, $y_pos + (($twitter_users[$tweet]*12) + 10), imagecolorallocate($im, (integer)(255),0,0));
+					imageline($im, $x_pos, $y_pos + (($twitter_users[$tweet]-1)*12)+2, $x_pos, $y_pos + ((($twitter_users[$tweet]-1)*12) + 12), imagecolorallocate($im, (integer)(255),0,0));
 					imagettftext ( $im , 10.0 , 0, 5 , $y_pos + ($twitter_users[$tweet]*12) , $white , "core/misc/fonts/arial.ttf" , $tweet);
 					
 					$x_pos += 1;
