@@ -58,6 +58,9 @@
 									<a href='?data=twitter_harvest&action=hashtag'>" . $this->language->translate("data/twitter_harvest", "Twitter harvest search term") . "</a>
 								</li>
 								<li>
+									<a href='?data=twitter_harvest&action=list_harvest'>" . $this->language->translate("data/twitter_harvest", "Twitter harvest list") . "</a>
+								</li>
+								<li>
 									<a href='?data=twitter_harvest&action=usertweets'>" . $this->language->translate("data/twitter_harvest", "Twitter harvest user tweets") . "</a>
 								</li>
 						   </ul>";
@@ -126,11 +129,47 @@
 		
 			$content = $connection->get($url);
 			
+			if(isset($_POST['screen_name'])){
+
+				$term = urlencode($_POST['screen_name']) . "_" . urlencode($_POST['list_name']);
+			
+			}else{
+			
+				$term = urlencode($_POST['term']);
+			
+			}
+			
 			require_once("core/file_handling/file_handling.php");
 			$file_process = new file_handling();
-			$file_process->create_file("data/twitter_harvest/files/" . urlencode($_POST['term']) . "_" . $time . "_" . $counter . ".json", serialize($content));
+			$file_process->create_file("data/twitter_harvest/files/" . $term . "_" . $time . "_" . $counter . ".json", serialize($content));
 			
-			if(isset($content->search_metadata->next_results)){
+			if(strpos($url,"list")!==FALSE){
+			
+				$last = array_pop($content);
+				
+				if(isset($last->id_str)){
+					
+					if(strpos($url,"max_id")===FALSE){
+					
+						$new_url = $url . "&max_id=" . $last->id_str;
+					
+					}else{
+					
+						$parts = explode("&max_id", $url);
+						
+						$new_url = $parts[0] . "&max_id=" . $last->id_str;
+					
+					}
+					
+					if($new_url!=$stem){
+					
+						$this->get_tweets($counter+1, $connection, $new_url, $url, $time);
+					
+					}
+					
+				}
+			
+			}else if(isset($content->search_metadata->next_results)){
 			
 				$this->get_tweets($counter+1, $connection, $stem . $content->search_metadata->next_results, $stem, $time);
 						
@@ -254,13 +293,83 @@
 					$content_tweets = $content->statuses;
 					$tweets = array_merge($tweets, $content_tweets);
 				
+				}else{
+				
+					if(count($content)!=0){
+					
+						$content_tweets = $content;
+						$tweets = array_merge($tweets, $content_tweets);
+				
+					
+					}
+				
 				}
 			
 			}
 			
-			$file_process->create_file("data/twitter_harvest/files/aggregate/" . urlencode($_POST['term']) . "_" . $time . ".json", serialize($tweets));
+			$keep = array();
+				
+			$already = array();
+				
+			foreach($tweets as $tweet){
+				
+				if(!in_array($tweet->id_str, $already)){
+					
+					array_push($already,$tweet->id_str);
+					array_push($keep,$tweet);
+					
+				}
+				
+			}
+			
+			$file_process->create_file("data/twitter_harvest/files/aggregate/" . urlencode($_POST['term']) . "_" . $time . ".json", serialize($keep));
 			
 			return array($counter,count($tweets));
+		
+		}
+		
+		private function list_harvest(){
+		
+			if(count($_POST)!==0){
+			
+				$setup = $this->get_twitter_setup();
+				
+				$connection = $this->configure_twitter_harvest($setup);
+				
+				$url = "lists/statuses.json?slug=" . urlencode($_POST['list_name']) . "&owner_screen_name=" . urlencode($_POST['screen_name']) . "&count=200";
+				
+				$time = time();
+				
+				$this->get_tweets(0,$connection,$url,"lists/statuses.json", $time);
+				
+				$data = $this->aggregate($time);
+				
+				$output = "<p>" . $data[0] . " " . $this->language->translate("data/twitter_harvest", "Files saved") . " / " . $data[1] . " " . $this->language->translate("data/twitter_harvest", "Tweets harvested") . "</p>";
+				return $output . "<p><a href='?data=twitter_harvest'>" . $this->language->translate("data/twitter_harvest", "Return to Twitter harvest") . "</a></p>";
+			
+			}else{
+		
+				if($this->is_twitter_setup()){
+				
+					return "<h2>" . $this->language->translate("data/twitter_harvest", "Twitter is not set up") . "</h2>
+					<p><a href='?data=twitter_setup'>" . $this->language->translate("data/twitter_harvest", "Setup twitter") . "</a></p>";
+				
+				}
+		
+				$output = "<h2>" . $this->language->translate("data/twitter_harvest", "Twitter list harvest") . "</h2>
+							<form action='' method='POST'>";
+			
+				$output .= "<p>" . $this->language->translate("data/twitter_harvest", "Enter user name of list owner") . "</p>
+						<input type='text' size=100 value='" . $this->language->translate("data/twitter_harvest", "Enter the term you wish to search twitter for") . "' name='screen_name' />
+						<p>" . $this->language->translate("data/twitter_harvest", "Enter list name") . "</p>
+						<input type='text' size=100 value='" . $this->language->translate("data/twitter_harvest", "Enter the term you wish to search twitter for") . "' name='list_name' />
+						
+						<input type='submit' value='" . $this->language->translate("data/twitter_harvest", "Search Twitter") . "' />
+					</form>";
+					
+				return $output;
+							
+			}
 		
 		}
 		
