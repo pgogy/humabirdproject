@@ -85,6 +85,89 @@
 				
 		}
 		
+		private function map_tweets_time($data){
+		
+			$tweets = array();
+				
+			$first = "";
+			
+			$times = array();
+	
+			foreach($data as $tweet){
+			
+				$time = explode(" ", $tweet->created_at);
+				
+				$clock = explode(":", $time[3]);
+				
+				switch($time[1]){
+				
+					case "Jan" : $month = 1; break;
+					case "Feb" : $month = 2; break;
+					case "Mar" : $month = 3; break;
+					case "Apr" : $month = 4; break;
+					case "May" : $month = 5; break;
+					case "Jun" : $month = 6; break;
+					case "Jul" : $month = 7; break;
+					case "Aug" : $month = 8; break;
+					case "Sep" : $month = 9; break;
+					case "Oct" : $month = 10; break;
+					case "Nov" : $month = 11; break;
+					case "Dec" : $month = 12; break;
+				
+				}
+				
+				$seconds = mktime($clock[0],$clock[1],$clock[2],$month,$time[2],array_pop($time));
+				
+				if(!isset($tweets[$seconds])){
+				
+					$tweets[$seconds] = array();
+				
+				}
+				
+				array_push($tweets[$seconds],$tweet);					
+				
+			}
+			
+			$index = array_keys($tweets);
+			
+			arsort($index);
+			
+			$last = array_shift($index);
+			$first = array_pop($index);
+			
+			arsort($tweets);
+			
+			$width = ($last - $first);
+			
+			$max = 0;
+			
+			$windows = array();
+			
+			foreach($tweets as $time => $data){
+		
+				$window = ($time-$first)%$_POST['time_period'];
+				$window = ($time-$first) - $window;
+				
+				if(!isset($windows[$window])){
+				
+					$windows[$window] = array();
+				
+				}
+				
+				array_push($windows[$window], $data);
+				
+				if(count($windows[$window])>$max){
+				
+					$max = count($windows[$window]);
+				
+				}
+			
+			}
+			
+			return array($windows,$max,$width,$first,$last);
+		
+		}
+	
 		private function tweet_time_plot(){
 		
 			if(count($_POST)!==0){
@@ -102,137 +185,67 @@
 				
 				}
 				
-				$tweets = array();
+				$response = $this->map_tweets_time($data);
 				
-				$first = "";
-		
-				foreach($data as $tweet){
+				$windows = $response[0];
+				$max = $response[1];
+				$width = $response[2];
+				$first = $response[3];
+				$last = $response[4];
 				
-					$time = explode(" ", $tweet->created_at);
-					
-					$clock = explode(":", $time[3]);
-					
-					switch($time[1]){
-					
-						case "Jan" : $month = 1; break;
-						case "Feb" : $month = 2; break;
-						case "Mar" : $month = 3; break;
-						case "Apr" : $month = 4; break;
-						case "May" : $month = 5; break;
-						case "Jun" : $month = 6; break;
-						case "Jul" : $month = 7; break;
-						case "Aug" : $month = 8; break;
-						case "Sep" : $month = 9; break;
-						case "Oct" : $month = 10; break;
-						case "Nov" : $month = 11; break;
-						case "Dec" : $month = 12; break;
-					
-					}
-					
-					$seconds = mktime($clock[0],$clock[1],$clock[2],$month,$time[2],array_pop($time));
+				$width_val = round($width/$_POST['time_period']);
 				
-					if($first==""){
-					
-						$first = $seconds;
-					
-					}
-					
-					$window = round(($first-$seconds)/$_POST['time_period']);
-					
-					if(!isset($tweets[$window])){
-					
-						$tweets[$window] = 0;
-					
-					}
-					
-					$tweets[$window]++;
-					
-				}
-				
-				$first = "";
-				$last = "";
-				
-				$first_tweet = array_shift($data);
-				$last_tweet = array_pop($data);
-				
-				$first = $first_tweet->created_at;
-				$last = $last_tweet->created_at;
-				
-				$time = explode(" ", $first);
-				
-				$clock = explode(":", $time[3]);
-					
-				switch($time[1]){
-				
-					case "Jan" : $month = 1; break;
-					case "Feb" : $month = 2; break;
-					case "Mar" : $month = 3; break;
-					case "Apr" : $month = 4; break;
-					case "May" : $month = 5; break;
-					case "Jun" : $month = 6; break;
-					case "Jul" : $month = 7; break;
-					case "Aug" : $month = 8; break;
-					case "Sep" : $month = 9; break;
-					case "Oct" : $month = 10; break;
-					case "Nov" : $month = 11; break;
-					case "Dec" : $month = 12; break;
-				
-				}
-					
-				$seconds = mktime($clock[0],$clock[1],$clock[2],$month,$time[2],array_pop($time));
-				
-				$max = max($tweets);
-				$min = min($tweets);
-				
-				$im = imagecreatetruecolor((count($tweets)*15) + 200, 1100);
+				$im = imagecreatetruecolor(($width_val*11) + 200, 800);
 				$white = imagecolorallocate($im, 255,255,255);
 				
-				imageline($im, 100, 980, 100, 25, $white);
-				imageline($im, 100, 980, (count($tweets)*15) + 200, 980, $white);
+				imageline($im, 100, 620, 100, 25, $white);
+				imageline($im, 100, 620, ($width_val*11) + 150, 620, $white);
 				
-				$scale = $max / 200;
+				$x_pos = 125;
+				$y_pos = 620;
 				
-				$x_pos = 105;
-				$y_pos = 980;
+				for($x=0; $x<=($last-$first); $x+=$_POST['time_period']){
 				
-				$height = ($max - $min)/5;
+					if(isset($windows[$x])){
 				
-				foreach($tweets as $value){
-				
-					imageline($im, $x_pos, $y_pos, $x_pos, $y_pos - (($value/$max)*950), $white);
-					imagettftext ( $im , 10.0 , 270, $x_pos , 1000, $white , "core/misc/fonts/arial.ttf" , date ("G:i:s", $seconds));
-					$x_pos+=15;
+						$height = ((count($windows[$x])/$max)*600);
+						
+					}else{
 					
-					$seconds -= $_POST['time_period'];
+						$height = 0;
 					
-				}	
+					}
+					
+					imageline($im, $x_pos, $y_pos, $x_pos, $y_pos - $height, $white);
+					imagettftext( $im , 8.0 , 270, $x_pos, 625, $white , "core/misc/fonts/arial.ttf" , date("H:i:s jS M Y", $first-($x)));
+					
+					$x_pos+=11;
+					
+				}
 				
-				$y_pos = 980;	
+				imagettftext ( $im , 10.0 , 0, 80 , 620, $white , "core/misc/fonts/arial.ttf" , 0);
 				
-				$height = 980 / 5;
+				$y_pos_orig = 620 - (600/5);
 				
-				$y_pos_orig = 980 - $height;
-				
-				imagettftext ( $im , 10.0 , 0, 10 , 980, $white , "core/misc/fonts/arial.ttf" , 0);
+				$height = 600 / 5;
 				
 				for($x=1;$x<=5;$x++){
 				
-					imagettftext ( $im , 10.0 , 0, 10 , $y_pos_orig, $white , "core/misc/fonts/arial.ttf" ,round(($max/6)*$x,0));
+					imagettftext( $im , 10.0 , 0, 80 , $y_pos_orig, $white , "core/misc/fonts/arial.ttf" ,round(($max/6)*$x,0));
 					
 					$y_pos_orig -= $height;
 				
 				}
 				
-				imagettftext ( $im , 10.0 , 0, 150 , 20, $white , "core/misc/fonts/arial.ttf" , $this->language->translate("tools/tweet_time_plot", "From") . " " . $last);
-				imagettftext ( $im , 10.0 , 0, 150 , 40, $white , "core/misc/fonts/arial.ttf" , $this->language->translate("tools/tweet_time_plot", "Till") . " " . $first);
+				imagettftext( $im , 8.0 , 0, 125, 760, $white , "core/misc/fonts/arial.ttf" , date("H:i:s jS M Y", $first));
 				
-				imagettftext ( $im , 10.0 , 0, 10 , 40, $white , "core/misc/fonts/arial.ttf" , $max);
+				imagettftext( $im , 8.0 , 0, 125, 775, $white , "core/misc/fonts/arial.ttf" , date("H:i:s jS M Y", $last));
 				
-				$file_process->file_image_create("data/twitter_harvest/files/time_plot/" . str_replace("%23","", str_replace(".","",$_POST['tweetfile'])) . "_timeplot.jpg", "jpeg", $im);
+				$file_process->file_image_create("data/twitter_harvest/files/time_plot/" . str_replace("%23","", str_replace(".","",$_POST['tweetfile'])) . "_time_plot.jpg", "jpeg", $im);
 				
 				$output = "<h2>" . $this->language->translate("tools/tweet_time_plot", "Tweet Time Plot") . "</h2>";
 					
-				$output .= "<img src='data/twitter_harvest/files/time_plot/" . str_replace("%23","", str_replace(".","",$_POST['tweetfile'])) . "_timeplot.jpg' />";
+				$output .= "<img src='data/twitter_harvest/files/time_plot/" . str_replace("%23","", str_replace(".","",$_POST['tweetfile'])) . "_time_plot.jpg' />";
 
 				return $output . "<p><a href='?tool=tweet_time_plot'>" . $this->language->translate("tools/tweet_time_plot", "Return to Tweet Time Map") . "</a></p>";
 				
@@ -277,7 +290,7 @@
 			}
 		
 		}
-		
+	
 		private function tweet_time_plot_words(){
 		
 			if(count($_POST)!==0){
@@ -295,198 +308,113 @@
 				
 				}
 				
-				$tweets = array();
+				$response = $this->map_tweets_time($data);
 				
-				$first = "";
+				$windows = $response[0];
+				$max = $response[1];
+				$width = $response[2];
+				$first = $response[3];
+				$last = $response[4];
 				
-				$times = array();
-		
-				foreach($data as $tweet){
+				$width_val = round($width/$_POST['time_period']);
 				
-					$time = explode(" ", $tweet->created_at);
-					
-					$clock = explode(":", $time[3]);
-					
-					switch($time[1]){
-					
-						case "Jan" : $month = 1; break;
-						case "Feb" : $month = 2; break;
-						case "Mar" : $month = 3; break;
-						case "Apr" : $month = 4; break;
-						case "May" : $month = 5; break;
-						case "Jun" : $month = 6; break;
-						case "Jul" : $month = 7; break;
-						case "Aug" : $month = 8; break;
-						case "Sep" : $month = 9; break;
-						case "Oct" : $month = 10; break;
-						case "Nov" : $month = 11; break;
-						case "Dec" : $month = 12; break;
-					
-					}
-					
-					$seconds = mktime($clock[0],$clock[1],$clock[2],$month,$time[2],array_pop($time));
-				
-					if($first==""){
-					
-						$first = $seconds;
-					
-					}
-					
-					$window = round(($first-$seconds)/$_POST['time_period']);
-					
-					if(!isset($tweets[$window])){
-					
-						$tweets[$window] = array(array(),0);
-					
-					}
-					
-					if(!isset($times[$window])){
-					
-						$times[$window] = 0;
-					
-					}					
-					
-					$words = explode(" ", strtolower($tweet->text));
-					
-					$tweets[$window][0] = array_merge($tweets[$window][0],$words);
-					
-					$tweets[$window][1]++;
-					
-					$times[$window]++;
-					
-				}
-				
-				$first = "";
-				$last = "";
-				
-				$first_tweet = array_shift($data);
-				$last_tweet = array_pop($data);
-				
-				$first = $first_tweet->created_at;
-				$last = $last_tweet->created_at;
-				
-				$time = explode(" ", $first);
-				
-				$clock = explode(":", $time[3]);
-					
-				switch($time[1]){
-				
-					case "Jan" : $month = 1; break;
-					case "Feb" : $month = 2; break;
-					case "Mar" : $month = 3; break;
-					case "Apr" : $month = 4; break;
-					case "May" : $month = 5; break;
-					case "Jun" : $month = 6; break;
-					case "Jul" : $month = 7; break;
-					case "Aug" : $month = 8; break;
-					case "Sep" : $month = 9; break;
-					case "Oct" : $month = 10; break;
-					case "Nov" : $month = 11; break;
-					case "Dec" : $month = 12; break;
-				
-				}
-					
-				$seconds = mktime($clock[0],$clock[1],$clock[2],$month,$time[2],array_pop($time));
-				
-				$max = max($times);
-				$min = min($times);
-				
-				$im = imagecreatetruecolor((count($tweets)*25) + 200, 1100);
+				$im = imagecreatetruecolor(($width_val*20) + 200, 800);
 				$white = imagecolorallocate($im, 255,255,255);
 				
-				imageline($im, 100, 980, 100, 25, $white);
-				imageline($im, 100, 980, (count($tweets)*25) + 200, 980, $white);
+				imageline($im, 100, 620, 100, 25, $white);
+				imageline($im, 100, 620, ($width_val*20) + 150, 620, $white);
 				
-				$scale = $max / 200;
+				$x_pos = 125;
+				$y_pos = 620;
 				
-				$x_pos = 105;
-				$y_pos = 980;
+				for($x=0; $x<=($last-$first); $x+=$_POST['time_period']){
 				
-				$height = ($max - $min)/5;
-				
-				foreach($tweets as $value){
-				
-					$cloud = array();
-				
-					foreach($value[0] as $word){
+					if(isset($windows[$x])){
 					
-						$word = str_replace("\n", "", $word);
-					
-						if(substr($word,0,1)!=="#"){
+						$words = $windows[$x];
+						
+						$cloud = array();
+						
+						foreach($words as $index => $tweets){
+						
+							foreach($tweets as $tweet){
 							
-							if(substr($word,0,1)!=="@"){
-							
-								if($word!="rt"){
+								$word_list = explode(" ", $tweet->text);
 								
-									if(strlen($word)!=1){
-							
-										if(!isset($cloud[trim($word)])){
+								foreach($word_list as $word){
+								
+									$word = strtolower(trim($word));
+								
+									if($word!="rt" && strlen($word)>=2 && substr($word,0,1)!="@"){
+								
+										if(isset($cloud[$word])){
 										
-											$cloud[trim($word)]=0;
+											$cloud[$word]++;
+										
+										}else{
+										
+											$cloud[$word]=1;
 										
 										}
 										
-										$cloud[trim($word)]++;
-										
 									}
-									
-								}
 								
-							}
+								}
 							
+							}
+						
 						}
+				
+						$height = ((count($windows[$x])/$max)*600);
+						
+					}else{
+					
+						$height = 0;
 					
 					}
 					
-					arsort($cloud);
+					imageline($im, $x_pos, $y_pos, $x_pos, $y_pos - $height, $white);
+					imagettftext( $im , 8.0 , 270, $x_pos, 625, $white , "core/misc/fonts/arial.ttf" , date("H:i:s jS M Y", $first+($x)));
 					
-					$cloud = array_slice($cloud,0,10);
-				
-					imageline($im, $x_pos, $y_pos, $x_pos, $y_pos - (($value[1]/$max)*950), $white);
-					imagettftext ( $im , 10.0 , 270, $x_pos , 1000, $white , "core/misc/fonts/arial.ttf" , date ("G:i:s", $seconds));
+					$small_cloud = array_slice($cloud,0,5);
 					
 					$string = "";
 					
-					foreach($cloud as $word => $value){
+					foreach($small_cloud as $word => $value){
 					
 						$string .= $word . " (" . $value . ") ";
 					
 					}
 					
-					imagettftext ( $im , 8.0 , 90, $x_pos+12, 978, $white , "core/misc/fonts/arial.ttf" , $string);
+					imagettftext( $im , 8.0 , 90, $x_pos+13, 610, $white , "core/misc/fonts/arial.ttf" , $string);
 					
-					$x_pos+=25;
+					$x_pos+=20;
 					
-					$seconds -= $_POST['time_period'];
-					
-				}	
+				}
 				
-				$y_pos = 980;	
+				imagettftext ( $im , 10.0 , 0, 80 , 620, $white , "core/misc/fonts/arial.ttf" , 0);
 				
-				$height = 980 / 5;
+				$y_pos_orig = 620 - (600/5);
 				
-				$y_pos_orig = 980 - $height;
-				
-				imagettftext ( $im , 10.0 , 0, 10 , 980, $white , "core/misc/fonts/arial.ttf" , 0);
+				$height = 600 / 5;
 				
 				for($x=1;$x<=5;$x++){
 				
-					imagettftext ( $im , 10.0 , 0, 10 , $y_pos_orig, $white , "core/misc/fonts/arial.ttf" ,round(($max/6)*$x,0));
+					imagettftext( $im , 10.0 , 0, 80 , $y_pos_orig, $white , "core/misc/fonts/arial.ttf" ,round(($max/6)*$x,0));
 					
 					$y_pos_orig -= $height;
 				
 				}
 				
-				imagettftext ( $im , 10.0 , 0, 150 , 20, $white , "core/misc/fonts/arial.ttf" , $this->language->translate("tools/tweet_time_plot", "From") . " " . $last);
-				imagettftext ( $im , 10.0 , 0, 150 , 40, $white , "core/misc/fonts/arial.ttf" , $this->language->translate("tools/tweet_time_plot", "Till") . " " . $first);
+				imagettftext( $im , 8.0 , 0, 125, 760, $white , "core/misc/fonts/arial.ttf" , date("H:i:s jS M Y", $first));
 				
-				imagettftext ( $im , 10.0 , 0, 10 , 40, $white , "core/misc/fonts/arial.ttf" , $max);
+				imagettftext( $im , 8.0 , 0, 125, 775, $white , "core/misc/fonts/arial.ttf" , date("H:i:s jS M Y", $last));
 				
-				$file_process->file_image_create("data/twitter_harvest/files/time_plot/" . str_replace("%23","", str_replace(".","",$_POST['tweetfile'])) . "_timeplotword.jpg", "jpeg", $im);
+				$file_process->file_image_create("data/twitter_harvest/files/time_plot/" . str_replace("%23","", str_replace(".","",$_POST['tweetfile'])) . "_time_plot_words.jpg", "jpeg", $im);
 				
 				$output = "<h2>" . $this->language->translate("tools/tweet_time_plot", "Tweet Time Plot") . "</h2>";
 					
-				$output .= "<img src='data/twitter_harvest/files/time_plot/" . str_replace("%23","", str_replace(".","",$_POST['tweetfile'])) . "_timeplotword.jpg' />";
+				$output .= "<img src='data/twitter_harvest/files/time_plot/" . str_replace("%23","", str_replace(".","",$_POST['tweetfile'])) . "_time_plot_words.jpg' />";
 
 				return $output . "<p><a href='?tool=tweet_time_plot'>" . $this->language->translate("tools/tweet_time_plot", "Return to Tweet Time Map") . "</a></p>";
 				
@@ -531,7 +459,7 @@
 			}
 		
 		}
-		
+			
 		private function tweet_time_plot_words_exclude(){
 		
 			if(count($_POST)!==0){
@@ -549,204 +477,115 @@
 				
 				}
 				
-				$tweets = array();
+				$response = $this->map_tweets_time($data);
 				
-				$first = "";
+				$windows = $response[0];
+				$max = $response[1];
+				$width = $response[2];
+				$first = $response[3];
+				$last = $response[4];
 				
-				$times = array();
-		
-				foreach($data as $tweet){
+				$width_val = round($width/$_POST['time_period']);
 				
-					$time = explode(" ", $tweet->created_at);
-					
-					$clock = explode(":", $time[3]);
-					
-					switch($time[1]){
-					
-						case "Jan" : $month = 1; break;
-						case "Feb" : $month = 2; break;
-						case "Mar" : $month = 3; break;
-						case "Apr" : $month = 4; break;
-						case "May" : $month = 5; break;
-						case "Jun" : $month = 6; break;
-						case "Jul" : $month = 7; break;
-						case "Aug" : $month = 8; break;
-						case "Sep" : $month = 9; break;
-						case "Oct" : $month = 10; break;
-						case "Nov" : $month = 11; break;
-						case "Dec" : $month = 12; break;
-					
-					}
-					
-					$seconds = mktime($clock[0],$clock[1],$clock[2],$month,$time[2],array_pop($time));
-				
-					if($first==""){
-					
-						$first = $seconds;
-					
-					}
-					
-					$window = round(($first-$seconds)/$_POST['time_period']);
-					
-					if(!isset($tweets[$window])){
-					
-						$tweets[$window] = array(array(),0);
-					
-					}
-					
-					if(!isset($times[$window])){
-					
-						$times[$window] = 0;
-					
-					}					
-					
-					$words = explode(" ", strtolower($tweet->text));
-					
-					$tweets[$window][0] = array_merge($tweets[$window][0],$words);
-					
-					$tweets[$window][1]++;
-					
-					$times[$window]++;
-					
-				}
-				
-				$first = "";
-				$last = "";
-				
-				$first_tweet = array_shift($data);
-				$last_tweet = array_pop($data);
-				
-				$first = $first_tweet->created_at;
-				$last = $last_tweet->created_at;
-				
-				$time = explode(" ", $first);
-				
-				$clock = explode(":", $time[3]);
-					
-				switch($time[1]){
-				
-					case "Jan" : $month = 1; break;
-					case "Feb" : $month = 2; break;
-					case "Mar" : $month = 3; break;
-					case "Apr" : $month = 4; break;
-					case "May" : $month = 5; break;
-					case "Jun" : $month = 6; break;
-					case "Jul" : $month = 7; break;
-					case "Aug" : $month = 8; break;
-					case "Sep" : $month = 9; break;
-					case "Oct" : $month = 10; break;
-					case "Nov" : $month = 11; break;
-					case "Dec" : $month = 12; break;
-				
-				}
-					
-				$seconds = mktime($clock[0],$clock[1],$clock[2],$month,$time[2],array_pop($time));
-				
-				$max = max($times);
-				$min = min($times);
-				
-				$im = imagecreatetruecolor((count($tweets)*25) + 200, 1100);
+				$im = imagecreatetruecolor(($width_val*20) + 200, 800);
 				$white = imagecolorallocate($im, 255,255,255);
 				
-				imageline($im, 100, 980, 100, 25, $white);
-				imageline($im, 100, 980, (count($tweets)*25) + 200, 980, $white);
+				imageline($im, 100, 620, 100, 25, $white);
+				imageline($im, 100, 620, ($width_val*20) + 150, 620, $white);
 				
-				$scale = $max / 200;
-				
-				$x_pos = 105;
-				$y_pos = 980;
-				
-				$height = ($max - $min)/5;
+				$x_pos = 125;
+				$y_pos = 620;
 				
 				$exclude = explode(",", strtolower($_POST['exclude']));
 				
-				foreach($tweets as $value){
+				for($x=0; $x<=($last-$first); $x+=$_POST['time_period']){
 				
-					$cloud = array();
-				
-					foreach($value[0] as $word){
+					if(isset($windows[$x])){
 					
-						$word = str_replace("\n", "", $word);
-					
-						if(substr($word,0,1)!=="#"){
+						$words = $windows[$x];
+						
+						$cloud = array();
+						
+						foreach($words as $index => $tweets){
+						
+							foreach($tweets as $tweet){
 							
-							if(substr($word,0,1)!=="@"){
-							
-								if($word!="rt"){
+								$word_list = explode(" ", $tweet->text);
 								
-									if(strlen($word)!=1){
-									
-										if(!in_array($word, $exclude)){
+								foreach($word_list as $word){
 								
-											if(!isset($cloud[trim($word)])){
-											
-												$cloud[trim($word)]=0;
-											
-											}
-											
-											$cloud[trim($word)]++;
-											
+									$word = strtolower(trim($word));
+								
+									if($word!="rt" && strlen($word)>=2 && substr($word,0,1)!="@" && !in_array($word,$exclude)){
+								
+										if(isset($cloud[$word])){
+										
+											$cloud[$word]++;
+										
+										}else{
+										
+											$cloud[$word]=1;
+										
 										}
 										
 									}
-									
-								}
 								
-							}
+								}
 							
+							}
+						
 						}
+				
+						$height = ((count($windows[$x])/$max)*600);
+						
+					}else{
+					
+						$height = 0;
 					
 					}
 					
-					arsort($cloud);
+					imageline($im, $x_pos, $y_pos, $x_pos, $y_pos - $height, $white);
+					imagettftext( $im , 8.0 , 270, $x_pos, 625, $white , "core/misc/fonts/arial.ttf" , date("H:i:s jS M Y", $first+$x));
 					
-					$cloud = array_slice($cloud,0,10);
-				
-					imageline($im, $x_pos, $y_pos, $x_pos, $y_pos - (($value[1]/$max)*950), $white);
-					imagettftext ( $im , 10.0 , 270, $x_pos , 1000, $white , "core/misc/fonts/arial.ttf" , date ("G:i:s", $seconds));
+					$small_cloud = array_slice($cloud,0,5);
 					
 					$string = "";
 					
-					foreach($cloud as $word => $value){
+					foreach($small_cloud as $word => $value){
 					
 						$string .= $word . " (" . $value . ") ";
 					
 					}
 					
-					imagettftext ( $im , 8.0 , 90, $x_pos+12, 978, $white , "core/misc/fonts/arial.ttf" , $string);
+					imagettftext( $im , 8.0 , 90, $x_pos+13, 610, $white , "core/misc/fonts/arial.ttf" , $string);
 					
-					$x_pos+=25;
+					$x_pos+=20;
 					
-					$seconds -= $_POST['time_period'];
-					
-				}	
+				}
 				
-				$y_pos = 980;	
+				imagettftext ( $im , 10.0 , 0, 80 , 620, $white , "core/misc/fonts/arial.ttf" , 0);
 				
-				$height = 980 / 5;
+				$y_pos_orig = 620 - (600/5);
 				
-				$y_pos_orig = 980 - $height;
-				
-				imagettftext ( $im , 10.0 , 0, 10 , 980, $white , "core/misc/fonts/arial.ttf" , 0);
+				$height = 600 / 5;
 				
 				for($x=1;$x<=5;$x++){
 				
-					imagettftext ( $im , 10.0 , 0, 10 , $y_pos_orig, $white , "core/misc/fonts/arial.ttf" ,round(($max/6)*$x,0));
+					imagettftext( $im , 10.0 , 0, 80 , $y_pos_orig, $white , "core/misc/fonts/arial.ttf" ,round(($max/6)*$x,0));
 					
 					$y_pos_orig -= $height;
 				
 				}
 				
-				imagettftext ( $im , 10.0 , 0, 150 , 20, $white , "core/misc/fonts/arial.ttf" , $this->language->translate("tools/tweet_time_plot", "From") . " " . $last);
-				imagettftext ( $im , 10.0 , 0, 150 , 40, $white , "core/misc/fonts/arial.ttf" , $this->language->translate("tools/tweet_time_plot", "Till") . " " . $first);
+				imagettftext( $im , 8.0 , 0, 125, 760, $white , "core/misc/fonts/arial.ttf" , date("H:i:s jS M Y", $first));
 				
-				imagettftext ( $im , 10.0 , 0, 10 , 40, $white , "core/misc/fonts/arial.ttf" , $max);
+				imagettftext( $im , 8.0 , 0, 125, 775, $white , "core/misc/fonts/arial.ttf" , date("H:i:s jS M Y", $last));
 				
-				$file_process->file_image_create("data/twitter_harvest/files/time_plot/" . str_replace("%23","", str_replace(".","",$_POST['tweetfile'])) . "_timeplotword.jpg", "jpeg", $im);
+				$file_process->file_image_create("data/twitter_harvest/files/time_plot/" . str_replace("%23","", str_replace(".","",$_POST['tweetfile'])) . "_time_plot_words.jpg", "jpeg", $im);
 				
 				$output = "<h2>" . $this->language->translate("tools/tweet_time_plot", "Tweet Time Plot") . "</h2>";
 					
-				$output .= "<img src='data/twitter_harvest/files/time_plot/" . str_replace("%23","", str_replace(".","",$_POST['tweetfile'])) . "_timeplotword.jpg' />";
+				$output .= "<img src='data/twitter_harvest/files/time_plot/" . str_replace("%23","", str_replace(".","",$_POST['tweetfile'])) . "_time_plot_words.jpg' />";
 
 				return $output . "<p><a href='?tool=tweet_time_plot'>" . $this->language->translate("tools/tweet_time_plot", "Return to Tweet Time Map") . "</a></p>";
 				

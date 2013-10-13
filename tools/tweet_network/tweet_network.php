@@ -811,10 +811,11 @@
 				
 				$output = "<h2>" . $this->language->translate("tools/tweet_network", "Tweet Display for file ") . " : " . $_POST['tweetfile'] . "</h2>";
 				
+				$users = array();
 				$twitter_users = array();
 				
 				foreach($data as $tweet){
-				
+									
 					if(isset($tweet->entities)){
 				
 						if(count($tweet->entities->user_mentions)!=0){
@@ -823,23 +824,37 @@
 							
 								if(!isset($twitter_users[$tweet->user->screen_name])){
 								
-									$twitter_users[$tweet->user->screen_name] = array();
+									$users[$tweet->user->screen_name] = array();
 								
 								}
 								
-								if(!isset($twitter_users[$inner_data->screen_name])){
+							}
+						
+						}
+						
+					}
+					
+				}
 								
-									$twitter_users[$inner_data->screen_name] = array();
+				foreach($data as $tweet){
+													
+					if(isset($tweet->entities)){
 								
-								}
-								
-								if(isset($twitter_users[$tweet->user->screen_name][$inner_data->screen_name])){
-								
-									$twitter_users[$tweet->user->screen_name][$inner_data->screen_name]++;
+						if(count($tweet->entities->user_mentions)!=0){
+
+							foreach($tweet->entities->user_mentions as $key => $inner_data){
+							
+								if(isset($users[$inner_data->screen_name])){
 									
-								}else{
-								
-									$twitter_users[$tweet->user->screen_name][$inner_data->screen_name]=1;
+									if(isset($twitter_users[$tweet->user->screen_name][$inner_data->screen_name])){
+									
+										$twitter_users[$tweet->user->screen_name][$inner_data->screen_name]++;
+										
+									}else{
+									
+										$twitter_users[$tweet->user->screen_name][$inner_data->screen_name]= array(1);
+										
+									}
 									
 								}
 							
@@ -851,11 +866,28 @@
 					
 				}
 				
-				$ratio = 360 / (count($twitter_users));
+				$refined_users = array();
 				
-				$users = max(count($twitter_users), 200);
+				foreach($twitter_users as $user => $connections){
 				
-				$width = max(count($twitter_users) * 8, 1200);
+					foreach($connections as $set => $inner_user){
+					
+						if(isset($twitter_users[$user][$set])&&isset($twitter_users[$set][$user])){
+							
+							$refined_users[$user][$set]=1;
+							$refined_users[$set][$user]=1;
+						
+						}
+					
+					}
+				
+				}
+				
+				$ratio = 360 / (count($refined_users));
+				
+				$users = max(count($refined_users), 200);
+				
+				$width = max(count($refined_users) * 8, 1200);
 				
 				if($width > 10000){
 				
@@ -877,27 +909,21 @@
 				
 				$clock_point = 0;	
 				
-				$interactions = array_keys($twitter_users);
+				$interactions = array_keys($refined_users);
 				
-				foreach($twitter_users as $key => $value){
+				foreach($refined_users as $key => $value){
 				
 					$y_pos = ($width / 2) + (integer)round( (($width / 2) - ($users/2)) * sin( deg2rad($clock_point) ) );
 					$x_pos = ($width / 2) + (integer)round( (($width / 2) - ($users/2)) * cos( deg2rad($clock_point) ) );
 					
 					for($x=0;$x<count($interactions);$x++){
 					
-						if(isset($value[$interactions[$x]])){
+						if(isset($twitter_users[$key][$interactions[$x]])){
 						
 							$line_y_pos = ($width / 2) + (integer)round( (($width / 2) - ($users/2)) * sin( deg2rad($ratio * $x) ) );
 							$line_x_pos = ($width / 2) + (integer)round( (($width / 2) - ($users/2)) * cos( deg2rad($ratio * $x) ) );
 							
 							if(isset($twitter_users[$key][$interactions[$x]])){
-							
-								if(isset($twitter_users[$interactions[$x]][$key])){
-								
-									unset($twitter_users[$interactions[$x]][$key]);
-								
-								}
 							
 								imageline($im, $x_pos, $y_pos, $line_x_pos, $line_y_pos, $white);
 							
