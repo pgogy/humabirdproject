@@ -257,7 +257,7 @@
 					
 					imagettftext( $im , 8.0 , 0, $x_pos, ($orig_y_pos -5), $white , "core/misc/fonts/arial.ttf" , array_sum($user_list));
 					
-					imagettftext( $im , 8.0 , 270, $x_pos, (count($names)*25)+10, $white , "core/misc/fonts/arial.ttf" , date("H:i:s jS M Y", $first-($x)));
+					imagettftext( $im , 8.0 , 270, $x_pos, (count($names)*25)+10, $white , "core/misc/fonts/arial.ttf" , date("H:i:s jS M Y", $first+($x)));
 					
 					$x_pos+=30;
 					

@@ -217,7 +217,7 @@
 					}
 					
 					imageline($im, $x_pos, $y_pos, $x_pos, $y_pos - $height, $white);
-					imagettftext( $im , 8.0 , 270, $x_pos, 625, $white , "core/misc/fonts/arial.ttf" , date("H:i:s jS M Y", $first-($x)));
+					imagettftext( $im , 8.0 , 270, $x_pos, 625, $white , "core/misc/fonts/arial.ttf" , date("H:i:s jS M Y", $first+($x)));
 					
 					$x_pos+=11;
 					
