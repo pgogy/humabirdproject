@@ -1,0 +1,2 @@
+<h2>Using the Tweet connections display</h2>
+<p>This tool will take a twitter harvest file - and display a pie chart of how connected people are and who is the most connected.</p>
