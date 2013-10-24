@@ -83,8 +83,6 @@
 		
 			if(count($_POST)!==0){
 
-				print_r($_POST);
-
 				require_once("core/file_handling/file_handling.php");
 				$file_process = new file_handling();
 				$data = $file_process->file_get_all("data/plain_text/files/" . $_POST['textfile']);

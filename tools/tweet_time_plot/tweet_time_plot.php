@@ -329,11 +329,11 @@
 				
 				for($x=0; $x<=($last-$first); $x+=$_POST['time_period']){
 				
+					$cloud = array();
+				
 					if(isset($windows[$x])){
 					
 						$words = $windows[$x];
-						
-						$cloud = array();
 						
 						foreach($words as $index => $tweets){
 						
@@ -500,11 +500,11 @@
 				
 				for($x=0; $x<=($last-$first); $x+=$_POST['time_period']){
 				
+					$cloud = array();
+				
 					if(isset($windows[$x])){
 					
 						$words = $windows[$x];
-						
-						$cloud = array();
 						
 						foreach($words as $index => $tweets){
 						
