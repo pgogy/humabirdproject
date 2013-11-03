@@ -1,0 +1,3 @@
+<h2>Using the Ngram tool</h2>
+<p>An Ngram is a series of words which occur next to each other in a text. So this first sentence contains the ngram words-which-occur-next-to-each as one Ngram.</p>
+<p>Use the ngram tool to turn plain text into ngram files</p>
